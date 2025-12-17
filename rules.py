@@ -3,7 +3,6 @@
 """
 
 from abc import ABC, abstractmethod
-from typing import List
 from exception import SudokuError
 from board import Board
 
@@ -34,7 +33,7 @@ class Rule(ABC):
         Args:
             board: 要检查的棋盘
         """
-        pass  # 默认实现不进行任何检查
+        pass
 
     def __str__(self) -> str:
         """返回规则名称"""
@@ -57,7 +56,7 @@ class NormalSudokuRowRule(Rule):
         for row in range(board.size):
             seen = set()
             for col in range(board.size):
-                digit = board.get(row, col)  # 使用get方法获取数字
+                digit = board.get(row, col)
                 if digit != 0:
                     if digit in seen:
                         return False
@@ -81,7 +80,7 @@ class NormalSudokuColumnRule(Rule):
         for col in range(board.size):
             seen = set()
             for row in range(board.size):
-                digit = board.get(row, col)  # 使用get方法获取数字
+                digit = board.get(row, col)
                 if digit != 0:
                     if digit in seen:
                         return False
@@ -126,7 +125,7 @@ class Normal9x9SudokuBlockRule(Rule):
                     for j in range(3):
                         row = block_row * 3 + i
                         col = block_col * 3 + j
-                        digit = board.get(row, col)  # 使用get方法获取数字
+                        digit = board.get(row, col)
                         if digit != 0:
                             if digit in seen:
                                 return False

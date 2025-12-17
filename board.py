@@ -2,7 +2,7 @@
 数独棋盘模块，定义Board类用于管理棋盘状态。
 """
 
-from typing import List, Optional
+from typing import Optional
 
 class Board:
     """数独棋盘类"""
@@ -40,17 +40,6 @@ class Board:
                 digit = int(clue[i * self.size + j])
                 self.grid[i][j] = digit
 
-    def set(self, row: int, col: int, digit: int) -> None:
-        """
-        在指定位置放置数字
-
-        Args:
-            row: 行索引（0-based）
-            col: 列索引（0-based）
-            digit: 要放置的数字
-        """
-        self.grid[row][col] = digit
-
     def get(self, row: int, col: int) -> int:
         """
         获取指定位置的数字
@@ -63,6 +52,17 @@ class Board:
             指定位置的数字
         """
         return self.grid[row][col]
+
+    def set(self, row: int, col: int, digit: int) -> None:
+        """
+        在指定位置放置数字
+
+        Args:
+            row: 行索引（0-based）
+            col: 列索引（0-based）
+            digit: 要放置的数字
+        """
+        self.grid[row][col] = digit
 
     def remove(self, row: int, col: int) -> None:
         """
@@ -84,7 +84,7 @@ class Board:
         for i in range(self.size):
             for j in range(self.size):
                 if self.grid[i][j] == 0:
-                    return (i, j)
+                    return i, j
         return None
 
     def copy(self) -> 'Board':

@@ -5,7 +5,6 @@
 from typing import Optional
 from board import Board
 from rules import Rule
-from exception import SudokuError
 
 class Solver:
     """数独求解器"""
@@ -21,7 +20,7 @@ class Solver:
         Raises:
             SudokuError: 如果棋盘与任何规则不兼容
         """
-        self.board = board.copy()  # 使用副本进行求解
+        self.board = board.copy()
         self.rules = rules
         self.steps = 0
 
@@ -57,17 +56,17 @@ class Solver:
         self.steps += 1
 
         # 记录原始数字
-        original_digit = self.board.get(row, col)  # 使用get方法获取数字
+        original_digit = self.board.get(row, col)
 
         # 放置数字
-        self.board.set(row, col, digit)  # 使用重命名后的set方法
+        self.board.set(row, col, digit)
 
         # 检查是否满足所有规则
         is_valid = self.check()
 
         # 如果不满足规则，则恢复原始状态
         if not is_valid:
-            self.board.set(row, col, original_digit)  # 使用重命名后的set方法
+            self.board.set(row, col, original_digit)
 
         return is_valid
 
@@ -79,7 +78,7 @@ class Solver:
             如果找到解返回True，否则返回False
         """
         # 找到第一个空格
-        empty_pos = self.board.find()  # 使用重命名后的find方法
+        empty_pos = self.board.find()
 
         # 如果没有空格，检查棋盘是否完全满足规则
         if not empty_pos:
@@ -95,7 +94,7 @@ class Solver:
                     return True
 
                 # 如果当前数字导致无解，则回溯
-                self.board.remove(row, col)  # 继续使用remove方法
+                self.board.remove(row, col)
 
         # 所有数字都尝试过，无解
         return False
