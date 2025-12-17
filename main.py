@@ -1,4 +1,5 @@
 """
+main.py
 数独求解器使用示例
 """
 
@@ -16,7 +17,7 @@ def main():
     board = Board(9)
 
     # 设置初始局面
-    clue = ("000000000"
+    clue = ("530070000"
             "600195000"
             "098000060"
             "800060003"
@@ -31,28 +32,22 @@ def main():
     print(board)
 
     # 创建规则
-    row_rule = Normal9x9SudokuRowRule()
-    col_rule = Normal9x9SudokuColumnRule()
+    row_rule = NormalSudokuRowRule()
+    col_rule = NormalSudokuColumnRule()
     block_rule = Normal9x9SudokuBlockRule()
 
     # 创建求解器
-    try:
-        solver = Solver(board, row_rule, col_rule, block_rule)
-        print("\n开始求解...")
+    solver = Solver(board, row_rule, col_rule, block_rule)
+    print("\n开始求解...")
 
-        # 求解数独
-        solution = solver.solution()
+    # 求解数独
+    solution = solver.solution()
 
-        if solution:
-            print("\n求解成功！解为:")
-            print(solution)
-            print(board)
-        else:
-            print("\n无解")
-
-    except Exception as e:
-        print(f"\n求解过程中发生错误: {e}")
-
+    if solution:
+        print("\n求解成功！解为:")
+        print(solution)
+    else:
+        print("\n无解")
 
 if __name__ == "__main__":
     main()

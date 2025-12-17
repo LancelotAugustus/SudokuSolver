@@ -1,4 +1,5 @@
 """
+rules.py
 数独规则模块，定义抽象规则类和具体规则实现。
 """
 
@@ -10,14 +11,9 @@ from board import Board
 class Rule(ABC):
     """数独规则抽象基类"""
 
-    def __init__(self, rule_name: str):
-        """
-        初始化规则
-
-        Args:
-            rule_name: 规则名称
-        """
-        self.rule_name = rule_name
+    def __init__(self):
+        """初始化规则，规则名称自动设置为类名"""
+        self.rule_name = self.__class__.__name__
 
     @abstractmethod
     def check(self, board: Board) -> bool:
@@ -50,31 +46,28 @@ class Rule(ABC):
         return self.rule_name
 
 
-class Normal9x9SudokuRowRule(Rule):
-    """9×9数独行规则"""
-
-    def __init__(self):
-        super().__init__("9×9数独行规则")
+class NormalSudokuRowRule(Rule):
+    """数独行规则（支持任意尺寸）"""
 
     def test(self, board: Board) -> None:
         """
-        检查棋盘是否为9×9
+        检查棋盘是否有效
 
         Args:
             board: 要检查的棋盘
 
         Raises:
-            SudokuError: 如果棋盘不是9×9
+            SudokuError: 如果棋盘尺寸无效
         """
-        if board.size != 9:
+        if board.size <= 0:
             raise SudokuError(
                 self.rule_name,
-                f"规则仅适用于9×9数独，当前棋盘尺寸为{board.size}×{board.size}"
+                f"棋盘尺寸必须大于0，当前尺寸为{board.size}"
             )
 
     def check(self, board: Board) -> bool:
         """
-        检查每一行是否满足数独规则（1-9不重复）
+        检查每一行是否满足数独规则（1-n不重复）
 
         Args:
             board: 要检查的棋盘
@@ -82,9 +75,9 @@ class Normal9x9SudokuRowRule(Rule):
         Returns:
             如果所有行都满足规则返回True，否则返回False
         """
-        for row in range(9):
+        for row in range(board.size):
             seen = set()
-            for col in range(9):
+            for col in range(board.size):
                 digit = board.grid[row][col]
                 if digit != 0:
                     if digit in seen:
@@ -93,31 +86,28 @@ class Normal9x9SudokuRowRule(Rule):
         return True
 
 
-class Normal9x9SudokuColumnRule(Rule):
-    """9×9数独列规则"""
-
-    def __init__(self):
-        super().__init__("9×9数独列规则")
+class NormalSudokuColumnRule(Rule):
+    """数独列规则（支持任意尺寸）"""
 
     def test(self, board: Board) -> None:
         """
-        检查棋盘是否为9×9
+        检查棋盘是否有效
 
         Args:
             board: 要检查的棋盘
 
         Raises:
-            SudokuError: 如果棋盘不是9×9
+            SudokuError: 如果棋盘尺寸无效
         """
-        if board.size != 9:
+        if board.size <= 0:
             raise SudokuError(
                 self.rule_name,
-                f"规则仅适用于9×9数独，当前棋盘尺寸为{board.size}×{board.size}"
+                f"棋盘尺寸必须大于0，当前尺寸为{board.size}"
             )
 
     def check(self, board: Board) -> bool:
         """
-        检查每一列是否满足数独规则（1-9不重复）
+        检查每一列是否满足数独规则（1-n不重复）
 
         Args:
             board: 要检查的棋盘
@@ -125,9 +115,9 @@ class Normal9x9SudokuColumnRule(Rule):
         Returns:
             如果所有列都满足规则返回True，否则返回False
         """
-        for col in range(9):
+        for col in range(board.size):
             seen = set()
-            for row in range(9):
+            for row in range(board.size):
                 digit = board.grid[row][col]
                 if digit != 0:
                     if digit in seen:
@@ -138,9 +128,6 @@ class Normal9x9SudokuColumnRule(Rule):
 
 class Normal9x9SudokuBlockRule(Rule):
     """9×9数独宫规则"""
-
-    def __init__(self):
-        super().__init__("9×9数独宫规则")
 
     def test(self, board: Board) -> None:
         """

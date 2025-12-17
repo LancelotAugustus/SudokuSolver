@@ -1,8 +1,9 @@
 """
+solver.py
 数独求解器模块，实现回溯算法求解数独。
 """
 
-from typing import List, Optional
+from typing import Optional
 from board import Board
 from rules import Rule
 from exception import SudokuError
@@ -21,7 +22,6 @@ class Solver:
         Raises:
             SudokuError: 如果棋盘与任何规则不兼容
         """
-        self.original_board = board
         self.board = board.copy()  # 使用副本进行求解
         self.rules = rules
 
@@ -95,7 +95,3 @@ class Solver:
         if self.solve():
             return self.board.copy()
         return None
-
-    def reset(self) -> None:
-        """重置求解器状态"""
-        self.board = self.original_board.copy()

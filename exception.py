@@ -1,4 +1,5 @@
 """
+exception.py
 自定义异常模块，用于处理数独求解过程中的异常情况。
 """
 
@@ -16,7 +17,3 @@ class SudokuError(Exception):
         self.rule_name = rule_name
         self.message = f"{message} (规则: {rule_name})"
         super().__init__(self.message)
-
-    def __str__(self):
-        """返回异常字符串表示"""
-        return self.message
