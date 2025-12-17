@@ -27,7 +27,7 @@ def main():
             "000080079")
 
     print("\n初始局面:")
-    board.set(clue)
+    board.configure(clue)
     print(board)
 
     # 创建规则

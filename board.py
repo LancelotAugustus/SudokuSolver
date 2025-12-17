@@ -1,5 +1,4 @@
 """
-board.py
 数独棋盘模块，定义Board类用于管理棋盘状态。
 """
 
@@ -18,9 +17,9 @@ class Board:
         self.size = size
         self.grid = [[0 for _ in range(size)] for _ in range(size)]
 
-    def set(self, clue: str) -> None:
+    def configure(self, clue: str) -> None:
         """
-        设置棋盘的初始局面
+        配置棋盘的初始局面
 
         Args:
             clue: 表示初始局面的字符串，使用0表示空格
@@ -41,7 +40,7 @@ class Board:
                 digit = int(clue[i * self.size + j])
                 self.grid[i][j] = digit
 
-    def place(self, row: int, col: int, digit: int) -> None:
+    def set(self, row: int, col: int, digit: int) -> None:
         """
         在指定位置放置数字
 
@@ -51,6 +50,19 @@ class Board:
             digit: 要放置的数字
         """
         self.grid[row][col] = digit
+
+    def get(self, row: int, col: int) -> int:
+        """
+        获取指定位置的数字
+
+        Args:
+            row: 行索引（0-based）
+            col: 列索引（0-based）
+
+        Returns:
+            指定位置的数字
+        """
+        return self.grid[row][col]
 
     def remove(self, row: int, col: int) -> None:
         """
@@ -62,7 +74,7 @@ class Board:
         """
         self.grid[row][col] = 0
 
-    def find_empty(self) -> Optional[tuple]:
+    def find(self) -> Optional[tuple]:
         """
         找到棋盘上的第一个空格
 

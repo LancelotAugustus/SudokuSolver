@@ -1,5 +1,4 @@
 """
-rules.py
 数独规则模块，定义抽象规则类和具体规则实现。
 """
 
@@ -58,7 +57,7 @@ class NormalSudokuRowRule(Rule):
         for row in range(board.size):
             seen = set()
             for col in range(board.size):
-                digit = board.grid[row][col]
+                digit = board.get(row, col)  # 使用get方法获取数字
                 if digit != 0:
                     if digit in seen:
                         return False
@@ -82,7 +81,7 @@ class NormalSudokuColumnRule(Rule):
         for col in range(board.size):
             seen = set()
             for row in range(board.size):
-                digit = board.grid[row][col]
+                digit = board.get(row, col)  # 使用get方法获取数字
                 if digit != 0:
                     if digit in seen:
                         return False
@@ -127,7 +126,7 @@ class Normal9x9SudokuBlockRule(Rule):
                     for j in range(3):
                         row = block_row * 3 + i
                         col = block_col * 3 + j
-                        digit = board.grid[row][col]
+                        digit = board.get(row, col)  # 使用get方法获取数字
                         if digit != 0:
                             if digit in seen:
                                 return False
