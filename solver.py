@@ -24,14 +24,27 @@ class Solver:
         """
         self.board = board.copy()  # 使用副本进行求解
         self.rules = rules
+        self.steps = 0
 
         # 验证棋盘与规则的兼容性
         for rule in self.rules:
             rule.test(self.board)
 
-    def _is_valid(self, row: int, col: int, digit: int) -> bool:
+    def check(self) -> bool:
         """
-        检查在指定位置放置指定数字是否有效
+        检查当前棋盘是否满足所有规则
+
+        Returns:
+            如果满足所有规则返回True，否则返回False
+        """
+        for rule in self.rules:
+            if not rule.check(self.board):
+                return False
+        return True
+
+    def trial(self, row: int, col: int, digit: int) -> bool:
+        """
+        尝试在指定位置放置数字
 
         Args:
             row: 行索引
@@ -39,17 +52,21 @@ class Solver:
             digit: 要放置的数字
 
         Returns:
-            如果放置有效返回True，否则返回False
+            如果放置后棋盘有效则返回True，否则返回False
         """
-        # 临时放置数字
+        # 增加步数计数
+        self.steps += 1
+
+        # 放置数字
         original_digit = self.board.grid[row][col]
-        self.board.grid[row][col] = digit
+        self.board.place(row, col, digit)
 
-        # 检查所有规则
-        is_valid = all(rule.check(self.board) for rule in self.rules)
+        # 检查是否满足所有规则
+        is_valid = self.check()
 
-        # 恢复原始状态
-        self.board.grid[row][col] = original_digit
+        # 如果不满足规则，则恢复原始状态
+        if not is_valid:
+            self.board.place(row, col, original_digit)
 
         return is_valid
 
@@ -63,18 +80,15 @@ class Solver:
         # 找到第一个空格
         empty_pos = self.board.find_empty()
 
-        # 如果没有空格，说明数独已解
+        # 如果没有空格，检查棋盘是否完全满足规则
         if not empty_pos:
-            return True
+            return self.check()
 
         row, col = empty_pos
 
         # 尝试所有可能的数字
         for digit in range(1, self.board.size + 1):
-            if self._is_valid(row, col, digit):
-                # 放置数字
-                self.board.place(row, col, digit)
-
+            if self.trial(row, col, digit):
                 # 递归求解
                 if self.solve():
                     return True

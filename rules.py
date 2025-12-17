@@ -28,18 +28,14 @@ class Rule(ABC):
         """
         pass
 
-    @abstractmethod
     def test(self, board: Board) -> None:
         """
-        检查棋盘与规则是否适配
+        检查棋盘与规则是否适配（默认实现不进行任何检查）
 
         Args:
             board: 要检查的棋盘
-
-        Raises:
-            SudokuError: 如果棋盘与规则不兼容
         """
-        pass
+        pass  # 默认实现不进行任何检查
 
     def __str__(self) -> str:
         """返回规则名称"""
@@ -48,22 +44,6 @@ class Rule(ABC):
 
 class NormalSudokuRowRule(Rule):
     """数独行规则（支持任意尺寸）"""
-
-    def test(self, board: Board) -> None:
-        """
-        检查棋盘是否有效
-
-        Args:
-            board: 要检查的棋盘
-
-        Raises:
-            SudokuError: 如果棋盘尺寸无效
-        """
-        if board.size <= 0:
-            raise SudokuError(
-                self.rule_name,
-                f"棋盘尺寸必须大于0，当前尺寸为{board.size}"
-            )
 
     def check(self, board: Board) -> bool:
         """
@@ -88,22 +68,6 @@ class NormalSudokuRowRule(Rule):
 
 class NormalSudokuColumnRule(Rule):
     """数独列规则（支持任意尺寸）"""
-
-    def test(self, board: Board) -> None:
-        """
-        检查棋盘是否有效
-
-        Args:
-            board: 要检查的棋盘
-
-        Raises:
-            SudokuError: 如果棋盘尺寸无效
-        """
-        if board.size <= 0:
-            raise SudokuError(
-                self.rule_name,
-                f"棋盘尺寸必须大于0，当前尺寸为{board.size}"
-            )
 
     def check(self, board: Board) -> bool:
         """

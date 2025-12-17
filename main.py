@@ -1,5 +1,4 @@
 """
-main.py
 数独求解器使用示例
 """
 
@@ -44,7 +43,8 @@ def main():
     solution = solver.solution()
 
     if solution:
-        print("\n求解成功！解为:")
+        print(f"\n求解成功！使用步数：{solver.steps}")
+        print("\n解为:")
         print(solution)
     else:
         print("\n无解")
