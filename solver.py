@@ -1,3 +1,4 @@
+# file: solver.py
 """
 数独求解器模块，实现回溯算法求解数独。
 """
@@ -5,6 +6,7 @@
 from typing import Optional
 from board import Board
 from rules import Rule
+
 
 class Solver:
     """数独求解器"""

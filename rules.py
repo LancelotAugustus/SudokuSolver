@@ -1,3 +1,4 @@
+# file: rules.py
 """
 数独规则模块，定义抽象规则类和具体规则实现。
 """
@@ -5,6 +6,7 @@
 from abc import ABC, abstractmethod
 from exception import SudokuError
 from board import Board
+
 
 class Rule(ABC):
     """数独规则抽象基类"""

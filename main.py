@@ -1,9 +1,11 @@
+# file: main.py
 """
 数独求解器使用示例
 """
 
 from rules import *
 from solver import Solver
+
 
 def main():
     """主函数示例"""
@@ -47,6 +49,7 @@ def main():
         print(solution)
     else:
         print("\n无解")
+
 
 if __name__ == "__main__":
     main()

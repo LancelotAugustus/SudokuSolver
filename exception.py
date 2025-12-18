@@ -1,6 +1,8 @@
+# file: exception.py
 """
 自定义异常模块，用于处理数独求解过程中的异常情况。
 """
+
 
 class SudokuError(Exception):
     """数独异常基类，用于处理棋盘与规则不兼容的情况"""
