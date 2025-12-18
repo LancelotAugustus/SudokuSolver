@@ -8,11 +8,6 @@ from solver import Solver
 
 
 def main():
-    """主函数示例"""
-    print("=" * 50)
-    print("数独求解器示例")
-    print("=" * 50)
-
     # 创建一个9×9数独棋盘
     board = Board(9)
 
