@@ -19,6 +19,18 @@ class Board:
         self.size = size
         self.grid = [[0 for _ in range(size)] for _ in range(size)]
 
+    def __str__(self):
+        """可视化棋盘状态"""
+        result = []
+        for i in range(self.size):
+            row_str = []
+            for j in range(self.size):
+                digit = self.grid[i][j]
+                row_str.append(str(digit) if digit != 0 else ".")
+            result.append(" ".join(row_str))
+
+        return "\n".join(result)
+
     def configure(self, clue: str) -> None:
         """
         配置棋盘的初始局面
@@ -76,7 +88,7 @@ class Board:
         """
         self.grid[row][col] = 0
 
-    def find(self) -> Optional[tuple]:
+    def find(self) -> Optional[tuple[int, int]]:
         """
         找到棋盘上的第一个空格
 
@@ -100,15 +112,3 @@ class Board:
         for i in range(self.size):
             new_board.grid[i] = self.grid[i].copy()
         return new_board
-
-    def __str__(self) -> str:
-        """可视化棋盘状态"""
-        result = []
-        for i in range(self.size):
-            row_str = []
-            for j in range(self.size):
-                digit = self.grid[i][j]
-                row_str.append(str(digit) if digit != 0 else ".")
-            result.append(" ".join(row_str))
-
-        return "\n".join(result)

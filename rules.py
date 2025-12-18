@@ -15,6 +15,10 @@ class Rule(ABC):
         """初始化规则，规则名称自动设置为类名"""
         self.rule_name = self.__class__.__name__
 
+    def __str__(self):
+        """返回规则名称"""
+        return self.rule_name
+
     @abstractmethod
     def check(self, board: Board) -> bool:
         """
@@ -36,10 +40,6 @@ class Rule(ABC):
             board: 要检查的棋盘
         """
         pass
-
-    def __str__(self) -> str:
-        """返回规则名称"""
-        return self.rule_name
 
 
 class NormalSudokuRowRule(Rule):
