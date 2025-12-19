@@ -3,12 +3,15 @@
 ## 项目整体结构
 
 ```
-Project:Sudoku-Solver/
-├── exception.py   # 异常处理模块
-├── board.py       # 棋盘数据管理模块
-├── rules.py       # 数独规则定义模块
-├── solver.py      # 求解器核心模块
-└── main.py        # 应用程序入口
+SudokuSolver/
+└── src/
+    ├── sudoku/           # 数独求解器核心包
+    │   ├── __init__.py   # 包初始化文件，定义公开接口
+    │   ├── exception.py  # 自定义异常处理模块
+    │   ├── board.py      # 棋盘管理模块
+    │   ├── rules.py      # 规则定义模块
+    │   └── solver.py     # 求解器模块
+    └── main.py           # 使用示例和主程序
 ```
 
 ## 模块详细说明
