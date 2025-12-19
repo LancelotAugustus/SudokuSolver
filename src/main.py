@@ -3,8 +3,7 @@
 数独求解器使用示例
 """
 
-from rules import *
-from solver import Solver
+from sudoku import *
 
 
 def main():

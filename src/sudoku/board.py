@@ -1,4 +1,4 @@
-# file: board.py
+# board.py
 """
 数独棋盘模块，定义Board类用于管理棋盘状态。
 """
