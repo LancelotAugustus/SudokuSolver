@@ -14,17 +14,14 @@ class Board:
         初始化数独棋盘
 
         Args:
-            size: 棋盘尺寸（必须指定），必须是1-9的正整数
+            size: 棋盘尺寸（必须指定），必须是正整数
 
         Raises:
-            ValueError: 如果size不是1-9的正整数
+            ValueError: 如果size不是正整数
         """
 
         if size <= 0:
             raise ValueError(f"棋盘尺寸必须为正整数，当前尺寸为{size}")
-
-        if size > 9:
-            raise ValueError(f"当前版本棋盘尺寸不能超过9，当前尺寸为{size}")
 
         self.size = size
         self.grid = [[0 for _ in range(size)] for _ in range(size)]
@@ -46,30 +43,34 @@ class Board:
         配置棋盘的初始局面
 
         Args:
-            clue: 表示初始局面的字符串，使用0表示空格，只能包含0-9的数字字符
+            clue: 表示初始局面的字符串，使用0表示空格，数字用空格分隔
 
         Raises:
             ValueError: 如果clue长度不等于棋盘格子总数，或包含无效字符
         """
+        # 按空格分割字符串
+        tokens = clue.split()
+
+        # 验证token数量是否等于棋盘格子总数
         expected_length = self.size * self.size
 
-        if len(clue) != expected_length:
+        if len(tokens) != expected_length:
             raise ValueError(
-                f"clue长度必须为{expected_length} (当前: {len(clue)})"
+                f"clue必须包含{expected_length}个数字 (当前: {len(tokens)})"
             )
 
         # 将字符串转换为二维列表
         for i in range(self.size):
             for j in range(self.size):
-                char = clue[i * self.size + j]
+                token = tokens[i * self.size + j]
 
-                # 验证字符是否为数字字符
-                if not char.isdigit():
+                # 验证token是否为有效的数字字符串
+                if not token.isdigit():
                     raise ValueError(
-                        f"clue包含非法字符: '{char}' (位置 {i * self.size + j})"
+                        f"clue包含非法字符: '{token}' (位置 {i * self.size + j})"
                     )
 
-                digit = int(char)
+                digit = int(token)
 
                 # 验证数字是否在有效范围内
                 if digit < 0 or digit > self.size:
