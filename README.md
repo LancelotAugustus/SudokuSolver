@@ -58,7 +58,7 @@ sudoku-solver/
 ├── rules.py           # 规则模块，定义数独约束规则
 ├── solver.py          # 求解器模块，实现回溯算法
 ├── exception.py       # 自定义异常处理
-└── main.py           # 使用示例和主程序
+└── main.py            # 使用示例和主程序
 ```
 
 ## 主要功能
