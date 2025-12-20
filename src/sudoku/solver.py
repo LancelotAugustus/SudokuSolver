@@ -1,4 +1,4 @@
-# solver.py
+# src/sudoku/solver.py
 """
 数独求解器模块，实现回溯算法求解数独。
 """
@@ -27,6 +27,15 @@ class Solver:
         self.steps = 0
 
         # 验证棋盘与规则的兼容性
+        self.test()
+
+    def test(self) -> None:
+        """
+        一次性调用所有rule实例的test方法
+
+        Raises:
+            SudokuError: 如果棋盘与任何规则不兼容
+        """
         for rule in self.rules:
             rule.test(self.board)
 

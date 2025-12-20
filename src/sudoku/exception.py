@@ -1,4 +1,4 @@
-# exception.py
+# src/sudoku/exception.py
 """
 自定义异常模块，用于处理数独求解过程中的异常情况。
 """

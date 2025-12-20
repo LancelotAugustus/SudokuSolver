@@ -1,4 +1,4 @@
-# __init__.py
+# src/sudoku/__init__.py
 """
 Sudoku Solver - 一个基于回溯算法的数独求解器
 """
@@ -22,5 +22,3 @@ __all__ = [
     'Normal9x9SudokuBlockRule',
     'Solver',
 ]
-
-__version__ = '0.3.0'

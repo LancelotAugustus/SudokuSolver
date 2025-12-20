@@ -1,4 +1,4 @@
-# rules.py
+# src/sudoku/rules.py
 """
 数独规则模块，定义抽象规则类和具体规则实现。
 """
