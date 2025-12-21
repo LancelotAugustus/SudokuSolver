@@ -1,18 +1,47 @@
-# Sudoku Solver v0.3.1
+# Sudoku Solver v0.4.0
 
-一个基于回溯算法的数独求解器，采用模块化设计，支持自定义规则和任意尺寸数独。
+一个基于Python的数独求解器，使用回溯算法实现，支持自定义规则和多种棋盘尺寸。
 
-## 项目概述
+## 功能特性
 
-这是一个用Python实现的数独求解器，采用面向对象的设计思想，将棋盘管理、规则定义和求解算法分离，提供了高度可扩展的架构。
+- ✅ 支持任意尺寸的数独棋盘（N×N）
+- ✅ 使用回溯算法进行高效求解
+- ✅ 模块化规则系统，易于扩展
+- ✅ 内置三种标准数独规则：
+    - 行规则（1-n数字不重复）
+    - 列规则（1-n数字不重复）
+    - 9×9宫规则（3×3子区域）
+- ✅ 实时求解进度显示
+- ✅ 详细的错误处理和兼容性检查
+- ✅ 简洁易用的API接口
 
-### 主要特性
+## 安装要求
 
-- 🎯 **灵活的架构**：支持任意尺寸的数独棋盘
-- 🔧 **规则系统**：可扩展的规则定义，支持自定义约束条件
-- ⚡ **高效求解**：基于回溯算法，快速求解数独谜题
-- 🧩 **模块化设计**：各组件职责明确，易于维护和扩展
-- 🛡️ **完善的错误处理**：提供详细的错误信息和兼容性检查
+### 系统要求
+
+- Python 3.7 或更高版本
+- pip 包管理器
+
+### 安装步骤
+
+1. 克隆或下载项目：
+
+```bash
+git clone <repository-url>
+cd SudokuSolver
+```
+
+2. 安装依赖：
+
+```bash
+pip install -r requirements.txt
+```
+
+**requirements.txt 内容：**
+
+```
+tqdm>=4.65.0
+```
 
 ## 项目结构
 
@@ -31,11 +60,7 @@ SudokuSolver/
     └── main.py           # 使用示例和主程序
 ```
 
-## 安装与使用
-
-### 环境要求
-
-- Python 3.7+
+## 快速开始
 
 ### 基本用法
 
@@ -44,24 +69,32 @@ from sudoku import Board, Solver
 from sudoku.rules import NormalSudokuRowRule, NormalSudokuColumnRule, Normal9x9SudokuBlockRule
 from utils.format import separate
 
-# 创建9×9数独棋盘
+# 1. 创建棋盘
 board = Board(9)
 
-# 设置初始局面（可以使用separate工具格式化字符串）
-clue = "030007004602041000050030967040003006087000350900700020718020040000160809400500030"
-clue = separate(clue)
+# 2. 配置初始局面
+clue = ("030007004"
+        "602041000"
+        "050030967"
+        "040003006"
+        "087000350"
+        "900700020"
+        "718020040"
+        "000160809"
+        "400500030")
 
+clue = separate(clue)  # 格式化字符串
 board.configure(clue)
 
-# 创建规则
+# 3. 创建规则
 row_rule = NormalSudokuRowRule()
 col_rule = NormalSudokuColumnRule()
 block_rule = Normal9x9SudokuBlockRule()
 
-# 创建求解器
+# 4. 创建求解器
 solver = Solver(board, row_rule, col_rule, block_rule)
 
-# 求解数独
+# 5. 求解
 solution = solver.solution()
 
 if solution:
@@ -72,177 +105,198 @@ else:
     print("无解")
 ```
 
-## 核心模块说明
+### 自定义棋盘尺寸
 
-### 1. Board（棋盘管理）
+```python
+# 创建4×4数独
+board = Board(4)
+clue = "1 0 3 0 0 2 0 4 3 0 0 1 0 4 0 2"
+board.configure(clue)
 
-`Board` 类负责管理数独棋盘的状态，提供以下功能：
+# 使用行规则和列规则（4×4没有宫规则）
+row_rule = NormalSudokuRowRule()
+col_rule = NormalSudokuColumnRule()
 
-- **初始化**：支持任意正整数尺寸的棋盘
-- **配置**：通过字符串配置初始局面
-- **操作**：获取、设置、移除数字
-- **查找**：找到第一个空格位置
-- **复制**：创建棋盘的深拷贝
+solver = Solver(board, row_rule, col_rule)
+solution = solver.solution()
+```
 
-### 2. Rule（规则系统）
+## API 文档
 
-规则系统采用抽象基类设计，支持扩展：
+### Board 类
 
-#### 内置规则：
+`Board` 类用于管理数独棋盘的状态。
 
-- `NormalSudokuRowRule`：标准数独行规则（1-n不重复）
-- `NormalSudokuColumnRule`：标准数独列规则（1-n不重复）
-- `Normal9x9SudokuBlockRule`：标准9×9数独宫规则
+#### 构造函数
 
-#### 自定义规则：
+```python
+Board(size: int)
+```
 
-继承 `Rule` 抽象基类，实现 `check()` 和可选的 `test()` 方法：
+- `size`: 棋盘尺寸（必须是正整数）
+
+#### 主要方法
+
+- `configure(clue: str) -> None`：配置棋盘的初始局面
+- `get(row: int, col: int) -> int`：获取指定位置的数字
+- `set(row: int, col: int, digit: int) -> None`：在指定位置放置数字
+- `remove(row: int, col: int) -> None`：移除指定位置的数字
+- `find() -> Optional[tuple[int, int]]`：找到第一个空格
+- `copy() -> Board`：创建当前棋盘的深拷贝
+
+### Rule 抽象类
+
+所有数独规则的基类。
+
+#### 内置规则
+
+1. **NormalSudokuRowRule**
+    - 检查每一行是否满足数独规则（1-n不重复）
+    - 支持任意尺寸
+
+2. **NormalSudokuColumnRule**
+    - 检查每一列是否满足数独规则（1-n不重复）
+    - 支持任意尺寸
+
+3. **Normal9x9SudokuBlockRule**
+    - 检查每一个3×3宫是否满足数独规则
+    - 仅适用于9×9棋盘
+
+#### 自定义规则
+
+继承 `Rule` 类并实现 `check()` 方法：
 
 ```python
 from sudoku.rules import Rule
 from sudoku.board import Board
 
 
-class CustomRule(Rule):
+class MyCustomRule(Rule):
     def check(self, board: Board) -> bool:
-        """检查是否满足自定义规则"""
-        # 实现检查逻辑
+        # 实现自定义规则检查逻辑
         pass
 
     def test(self, board: Board) -> None:
-        """检查棋盘与规则的兼容性"""
-        # 实现兼容性检查
+        # 可选：检查棋盘与规则的兼容性
         pass
 ```
 
-### 3. Solver（求解器）
+### Solver 类
 
-`Solver` 类实现了回溯算法：
+数独求解器，使用回溯算法。
 
-- **初始化**：接受棋盘和规则列表
-- **兼容性检查**：验证棋盘与规则的兼容性
-- **求解**：使用深度优先搜索回溯算法
-- **状态跟踪**：记录求解步数
-
-### 4. 异常处理
-
-`SudokuError` 异常用于处理规则与棋盘不兼容的情况，提供详细的错误信息。
-
-### 5. 工具函数
-
-`separate()` 函数：将无空格分隔的数独字符串转换为空格分隔格式。
-
-## API参考
-
-### Board类
+#### 构造函数
 
 ```python
-class Board:
-    def __init__(self, size: int)
-
-        def configure(self, clue: str) -> None
-
-        def get(self, row: int, col: int) -> int
-
-        def set(self, row: int, col: int, digit: int) -> None
-
-        def remove(self, row: int, col: int) -> None
-
-        def find(self) -> Optional[tuple[int, int]]
-
-        def copy(self) -> 'Board'
+Solver(board: Board, *rules: Rule)
 ```
 
-### Rule抽象基类
+- `board`: 要求解的数独棋盘
+- `*rules`: 要应用的规则列表
 
-```python
-class Rule(ABC):
-    @abstractmethod
-    def check(self, board: Board) -> bool
+#### 主要方法
 
-        def test(self, board: Board) -> None
+- `solve() -> bool`：使用回溯算法求解数独
+- `solution() -> Optional[Board]`：获取求解结果
+- `check() -> bool`：检查当前棋盘是否满足所有规则
+- `trial(row: int, col: int, digit: int) -> bool`：尝试在指定位置放置数字
+
+### 工具函数
+
+- `separate(clue: str) -> str`：将无空格分隔的字符串转换为空格分隔格式
+
+## 输入格式
+
+### 棋盘初始化字符串
+
+使用空格分隔的数字字符串表示棋盘状态：
+
+- `0` 表示空格
+- 数字范围：0 到棋盘尺寸
+- 长度必须等于棋盘格子总数
+
+**示例（9×9）：**
+
+```
+"0 3 0 0 0 7 0 0 4 6 0 2 0 4 1 0 0 0 0 5 0 0 3 0 9 6 7 ..."
 ```
 
-### Solver类
+### 便捷格式转换
+
+如果输入是无空格的字符串，可以使用 `separate()` 函数转换：
 
 ```python
-class Solver:
-    def __init__(self, board: Board, *rules: Rule)
+from utils.format import separate
 
-        def test(self) -> None
-
-        def check(self) -> bool
-
-        def trial(self, row: int, col: int, digit: int) -> bool
-
-        def solve(self) -> bool
-
-        def solution(self) -> Optional[Board]
-```
-
-## 示例
-
-### 示例1：标准9×9数独求解
-
-```python
-from sudoku import Board, Solver
-from sudoku.rules import NormalSudokuRowRule, NormalSudokuColumnRule, Normal9x9SudokuBlockRule
-
-# 创建棋盘并配置
-board = Board(9)
-board.configure("""
-5 3 0 0 7 0 0 0 0
-6 0 0 1 9 5 0 0 0
-0 9 8 0 0 0 0 6 0
-8 0 0 0 6 0 0 0 3
-4 0 0 8 0 3 0 0 1
-7 0 0 0 2 0 0 0 6
-0 6 0 0 0 0 2 8 0
-0 0 0 4 1 9 0 0 5
-0 0 0 0 8 0 0 7 9
-""".strip())
-
-# 创建求解器并求解
-solver = Solver(
-    board,
-    NormalSudokuRowRule(),
-    NormalSudokuColumnRule(),
-    Normal9x9SudokuBlockRule()
-)
-
-solution = solver.solution()
-if solution:
-    print("找到解！")
-    print(solution)
-```
-
-### 示例2：自定义尺寸数独（仅行列规则）
-
-```python
-# 创建4×4数独棋盘
-board = Board(4)
-board.configure("""
-1 0 3 4
-3 4 1 0
-0 1 4 3
-4 3 0 1
-""".strip())
-
-# 仅使用行列规则
-solver = Solver(
-    board,
-    NormalSudokuRowRule(),
-    NormalSudokuColumnRule()
-)
-
-solution = solver.solution()
+clue = "030007004602041000..."
+formatted_clue = separate(clue)  # 转换为空格分隔格式
 ```
 
 ## 错误处理
 
-程序会检查以下错误情况：
+### 异常类型
 
-1. **棋盘尺寸无效**：尺寸必须为正整数
-2. **配置字符串无效**：长度不匹配或包含非法字符
-3. **数字超出范围**：数字必须在0到棋盘尺寸之间
-4. **规则兼容性**：规则与棋盘尺寸不匹配（如9宫规则用于非9×9棋盘）
+- `SudokuError`: 数独异常基类，用于处理棋盘与规则不兼容的情况
+
+### 常见错误
+
+1. **棋盘尺寸错误**
+   ```python
+   # 错误的尺寸
+   board = Board(-1)  # 抛出 ValueError
+   ```
+
+2. **初始化字符串格式错误**
+   ```python
+   board = Board(9)
+   board.configure("1 2 3")  # 长度不足，抛出 ValueError
+   ```
+
+3. **规则兼容性错误**
+   ```python
+   board = Board(4)  # 4×4棋盘
+   block_rule = Normal9x9SudokuBlockRule()
+   solver = Solver(board, block_rule)  # 抛出 SudokuError
+   ```
+
+## 性能特性
+
+- 使用优化的回溯算法
+- 实时进度显示（使用 tqdm 进度条）
+- 步数统计
+- 内存高效的棋盘复制
+
+## 示例输出
+
+运行 `main.py` 的示例输出：
+
+```
+初始局面:
+. 3 . . . 7 . . 4
+6 . 2 . 4 1 . . .
+. 5 . . 3 . 9 6 7
+. 4 . . . 3 . . 6
+. 8 7 . . . 3 5 .
+9 . . 7 . . . 2 .
+7 1 8 . 2 . . 4 .
+. . . 1 6 . 8 . 9
+4 . . 5 . . . 3 .
+
+开始求解...
+求解进度: 1000步 - 速率: 1000步/s - 已用: 00:01
+
+求解成功！使用步数：1000
+
+解为:
+1 3 5 6 9 7 2 8 4
+6 7 2 8 4 1 5 9 3
+8 5 4 2 3 9 1 6 7
+2 4 9 1 5 3 7 6 8
+5 8 7 4 2 6 3 1 9
+9 6 3 7 8 5 4 2 1
+7 1 8 3 2 9 6 4 5
+3 2 6 1 7 4 8 5 9
+4 9 1 5 6 8 7 3 2
+```
+
+**提示**：本项目仍在积极开发中，API 可能在未来版本中发生变化。

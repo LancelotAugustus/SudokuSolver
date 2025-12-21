@@ -4,6 +4,7 @@
 """
 
 from typing import Optional
+from tqdm import tqdm
 from .board import Board
 from .rules import Rule
 
@@ -25,6 +26,7 @@ class Solver:
         self.board = board.copy()
         self.rules = rules
         self.steps = 0
+        self.pbar = None
 
         # 验证棋盘与规则的兼容性
         self.test()
@@ -65,6 +67,9 @@ class Solver:
         """
         # 增加步数计数
         self.steps += 1
+
+        # 更新进度条
+        self.pbar.update(1)
 
         # 记录原始数字
         original_digit = self.board.get(row, col)
@@ -117,6 +122,13 @@ class Solver:
         Returns:
             返回求解后的棋盘，如果无解则返回None
         """
+        self.pbar = tqdm(
+            desc="求解进度",
+            unit="步",
+            bar_format="{desc}: {n}步 - 速率: {rate_fmt} - 已用: {elapsed}",
+        )
+
         if self.solve():
             return self.board.copy()
+
         return None
