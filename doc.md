@@ -1,4 +1,4 @@
-# Sudoku Solver (v0.4.0)
+# Sudoku Solver (v0.5.0)
 
 ## 项目整体结构
 
@@ -46,8 +46,7 @@ SudokuSolver/
 
 - `__init__(size)`: 初始化数独棋盘，创建指定尺寸的空棋盘，验证size必须为正整数，否则抛出`ValueError`
 - `__str__()`: 返回棋盘的可视化字符串表示，用"."表示空格，用空格分隔每个数字
-- `configure(clue)`: 根据字符串配置初始棋盘状态，字符串使用空格分隔数字，验证字符串长度必须等于棋盘格子总数，且每个字符必须为有效数字字符，数字必须在0到size之间，否则抛出
-  `ValueError`
+- `configure(clue)`: 根据字符串配置初始棋盘状态，字符串使用空格分隔数字，验证字符串长度必须等于棋盘格子总数，且每个字符必须为有效数字字符，数字必须在0到size之间，否则抛出`ValueError`
 - `get(row, col)`: 安全获取指定位置的数字
 - `set(row, col, digit)`: 在指定位置放置数字
 - `remove(row, col)`: 移除指定位置的数字（设置为0）
@@ -60,9 +59,10 @@ SudokuSolver/
 **核心组件**：
 
 - `Rule` 抽象基类
-- `NormalSudokuRowRule` 类（行规则）
-- `NormalSudokuColumnRule` 类（列规则）
-- `Normal9x9SudokuBlockRule` 类（9×9宫规则）
+- `NormalRowRule` 类（行规则）
+- `NormalColumnRule` 类（列规则）
+- `Normal9x9BlockRule` 类（9×9宫规则）
+- `NonConsecutiveRule` 类（非连续规则）
 
 **Rule抽象基类**：
 
@@ -73,23 +73,31 @@ SudokuSolver/
 
 **具体规则类**：
 
-1. **行规则** (`NormalSudokuRowRule`)：
+1. **行规则** (`NormalRowRule`)：
     - 检查每行数字1-n不重复（n为棋盘尺寸）
     - 支持任意尺寸棋盘
     - 使用`board.get(row, col)`安全获取数字
     - 使用基类默认`test()`方法（不进行兼容性检查）
 
-2. **列规则** (`NormalSudokuColumnRule`)：
+2. **列规则** (`NormalColumnRule`)：
     - 检查每列数字1-n不重复（n为棋盘尺寸）
     - 支持任意尺寸棋盘
     - 使用`board.get(row, col)`安全获取数字
     - 使用基类默认`test()`方法（不进行兼容性检查）
 
-3. **宫规则** (`Normal9x9SudokuBlockRule`)：
+3. **宫规则** (`Normal9x9BlockRule`)：
     - 检查每个3×3宫内数字1-9不重复
     - **仅适用于9×9棋盘**
     - 重写`test()`方法，检查棋盘尺寸是否为9，不符合时抛出`SudokuError`
     - 实现`check()`方法，检查9个3×3宫的规则满足情况
+
+4. **非连续规则** (`NonConsecutiveRule`)：
+    - 检查正交相邻的单元格不能包含连续的数字
+    - 支持任意尺寸棋盘
+    - 使用基类默认`test()`方法（不进行兼容性检查）
+    - 实现`check()`方法，检查上下左右四个方向的相邻单元格
+    - 只检查非空单元格（值为0的单元格跳过）
+    - 使用`abs(current_digit - neighbor_digit) == 1`判断是否连续
 
 ### 4. 求解器核心模块 (solver.py)
 
@@ -133,7 +141,7 @@ SudokuSolver/
 1. 创建9×9数独棋盘实例
 2. 使用`separate`函数格式化无空格的初始局面字符串
 3. 设置数独初始局面
-4. 创建三种规则实例（行规则、列规则、宫规则）
+4. 创建四种规则实例（行规则、列规则、宫规则、非连续规则）
 5. 初始化求解器并求解
 6. 显示初始局面、求解步数和最终解
 
@@ -144,7 +152,7 @@ SudokuSolver/
 1. 创建`Board`实例，指定尺寸为9，验证尺寸是否为正整数
 2. 使用`separate()`函数格式化无空格的clue字符串
 3. 调用`board.configure(clue)`配置初始局面，验证字符串长度必须为81（9×9），每个字符必须是数字且在0-9范围内
-4. 创建三个规则实例（行规则、列规则、宫规则）
+4. 创建四个规则实例（行规则、列规则、宫规则、非连续规则）
 5. 创建`Solver`实例，传入棋盘和规则，验证规则兼容性（特别是宫规则需要棋盘尺寸为9）
 
 ### 求解阶段

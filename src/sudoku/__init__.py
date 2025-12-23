@@ -7,9 +7,10 @@ from .exception import SudokuError
 from .board import Board
 from .rules import (
     Rule,
-    NormalSudokuRowRule,
-    NormalSudokuColumnRule,
-    Normal9x9SudokuBlockRule
+    NormalRowRule,
+    NormalColumnRule,
+    Normal9x9BlockRule,
+    NonConsecutiveRule
 )
 from .solver import Solver
 
@@ -17,8 +18,9 @@ __all__ = [
     'SudokuError',
     'Board',
     'Rule',
-    'NormalSudokuRowRule',
-    'NormalSudokuColumnRule',
-    'Normal9x9SudokuBlockRule',
+    'NormalRowRule',
+    'NormalColumnRule',
+    'Normal9x9BlockRule',
+    'NonConsecutiveRule',
     'Solver',
 ]

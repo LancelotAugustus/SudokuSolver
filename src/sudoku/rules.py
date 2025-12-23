@@ -42,7 +42,7 @@ class Rule(ABC):
         pass
 
 
-class NormalSudokuRowRule(Rule):
+class NormalRowRule(Rule):
     """数独行规则（支持任意尺寸）"""
 
     def check(self, board: Board) -> bool:
@@ -66,7 +66,7 @@ class NormalSudokuRowRule(Rule):
         return True
 
 
-class NormalSudokuColumnRule(Rule):
+class NormalColumnRule(Rule):
     """数独列规则（支持任意尺寸）"""
 
     def check(self, board: Board) -> bool:
@@ -90,7 +90,7 @@ class NormalSudokuColumnRule(Rule):
         return True
 
 
-class Normal9x9SudokuBlockRule(Rule):
+class Normal9x9BlockRule(Rule):
     """9×9数独宫规则"""
 
     def test(self, board: Board) -> None:
@@ -132,4 +132,54 @@ class Normal9x9SudokuBlockRule(Rule):
                             if digit in seen:
                                 return False
                             seen.add(digit)
+        return True
+
+
+class NonConsecutiveRule(Rule):
+    """非连续规则：正交相邻的单元格不能包含连续的数字"""
+
+    def check(self, board: Board) -> bool:
+        """
+        检查棋盘是否满足非连续规则
+
+        Args:
+            board: 要检查的棋盘
+
+        Returns:
+            如果满足规则返回True，否则返回False
+        """
+        size = board.size
+
+        for i in range(size):
+            for j in range(size):
+                current_digit = board.get(i, j)
+
+                # 只检查非空单元格
+                if current_digit == 0:
+                    continue
+
+                # 检查上方相邻单元格
+                if i > 0:
+                    up_digit = board.get(i - 1, j)
+                    if up_digit != 0 and abs(current_digit - up_digit) == 1:
+                        return False
+
+                # 检查下方相邻单元格
+                if i < size - 1:
+                    down_digit = board.get(i + 1, j)
+                    if down_digit != 0 and abs(current_digit - down_digit) == 1:
+                        return False
+
+                # 检查左方相邻单元格
+                if j > 0:
+                    left_digit = board.get(i, j - 1)
+                    if left_digit != 0 and abs(current_digit - left_digit) == 1:
+                        return False
+
+                # 检查右方相邻单元格
+                if j < size - 1:
+                    right_digit = board.get(i, j + 1)
+                    if right_digit != 0 and abs(current_digit - right_digit) == 1:
+                        return False
+
         return True

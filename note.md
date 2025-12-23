@@ -1,3 +1,12 @@
+# Sudoku-Solver v0.5.0 版本更新日志
+
+## 新增特性
+- 新增`NonConsecutiveRule`规则类，支持正交相邻单元格不能包含连续数字的特殊数独规则
+
+## 功能优化
+- 简化规则类命名（如`NormalSudokuRowRule`→`NormalRowRule`），提升代码简洁性
+- 更新示例程序，展示如何使用新增的非连续数独规则求解复杂数独
+
 # Sudoku-Solver v0.4.0 版本更新日志
 
 ## 新增特性

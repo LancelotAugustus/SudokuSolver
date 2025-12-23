@@ -21,15 +21,16 @@ def main():
             ""
             "")
 
-    clue = ("300001008"
-            "090005040"
-            "000070000"
-            "240000000"
-            "008352100"
-            "000000095"
+    clue = ("000000700"
+            "060000000"
+            "000500400"
+            "500000007"
             "000060000"
-            "070500060"
-            "500400001")
+            "800000001"
+            "007002000"
+            "000000040"
+            "004000000")
+
     clue = separate(clue)
 
     print("\n初始局面:")
@@ -37,12 +38,13 @@ def main():
     print(board)
 
     # 创建规则
-    row_rule = NormalSudokuRowRule()
-    col_rule = NormalSudokuColumnRule()
-    block_rule = Normal9x9SudokuBlockRule()
+    rule1 = NormalRowRule()
+    rule2 = NormalColumnRule()
+    rule3 = Normal9x9BlockRule()
+    rule4 = NonConsecutiveRule()
 
     # 创建求解器
-    solver = Solver(board, row_rule, col_rule, block_rule)
+    solver = Solver(board, rule1, rule2, rule3, rule4)
     print("\n开始求解...")
 
     # 求解数独
