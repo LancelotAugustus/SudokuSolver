@@ -246,3 +246,81 @@ class ThermometerRule(Rule):
                     return False
 
         return True
+
+
+class KillerRule(Rule):
+    """杀手数独规则：笼子内的数字之和必须等于角标数字，且笼子内数字不能重复"""
+
+    def __init__(self):
+        """初始化杀手数独规则"""
+        super().__init__()
+        self.cages = []
+        self.cage_sums = []
+
+    def set(self, cage_sum: int, cage: list[tuple[int, int]]) -> None:
+        """
+        添加一个笼子
+
+        Args:
+            cage_sum: 笼子内数字的和值
+            cage: 笼子覆盖的单元格坐标列表
+        """
+        self.cage_sums.append(cage_sum)
+        self.cages.append(cage)
+
+    def validate_compatibility(self, board: Board) -> None:
+        """
+        检查笼子坐标是否在棋盘范围内
+
+        Args:
+            board: 要检查的棋盘
+
+        Raises:
+            SudokuError: 如果笼子坐标超出棋盘范围
+        """
+        size = board.size
+
+        for i, cage in enumerate(self.cages):
+            for row, col in cage:
+                if row < 0 or row >= size or col < 0 or col >= size:
+                    raise SudokuError(
+                        self.rule_name,
+                        f"笼子{i}坐标({row},{col})超出棋盘范围(0-{size - 1})"
+                    )
+
+    def is_valid(self, board: Board) -> bool:
+        """
+        检查棋盘是否满足杀手数独规则
+
+        Args:
+            board: 要检查的棋盘
+
+        Returns:
+            如果满足规则返回True，否则返回False
+        """
+        for cage, cage_sum in zip(self.cages, self.cage_sums):
+            digits = []
+            s = 0
+
+            # 收集笼子内的数字
+            for row, col in cage:
+                digit = board.get_digit(row, col)
+                if digit != 0:
+                    digits.append(digit)
+                    s += digit
+
+            # 检查笼子内数字是否重复
+            if len(digits) != len(set(digits)):
+                return False
+
+            # 检查笼子和是否等于目标和
+            if len(digits) == len(cage):
+                # 如果笼子已填满，检查和是否等于目标和
+                if s != cage_sum:
+                    return False
+            else:
+                # 如果笼子未填满，检查和是否已超过目标和
+                if s >= cage_sum:
+                    return False
+
+        return True

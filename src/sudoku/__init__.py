@@ -18,4 +18,5 @@ __all__ = [
     'Normal9x9BlockRule',
     'NonConsecutiveRule',
     'ThermometerRule',
+    'KillerRule',
 ]
