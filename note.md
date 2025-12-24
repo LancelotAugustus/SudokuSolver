@@ -1,3 +1,19 @@
+# Sudoku-Solver v0.7.0 版本更新日志
+
+## 功能优化
+
+- 重构核心模块命名，提升代码一致性和可读性：
+    - 规则类命名简化（`NormalRowRule`→`RowRule`，`NormalColumnRule`→`ColumnRule`）
+    - 方法命名规范化（`check`→`is_valid`，`test`→`validate_compatibility`，`trial`→`try_set_digit`）
+    - 棋盘属性标准化（`grid`→`cells`，`find`→`find_empty_cell`）
+- 统一术语使用（`clue`→`puzzle`，`solution`→`get_solution`）
+- 重构工具模块结构，将`format.py`重命名为`parser.py`，明确其解析器功能定位
+- 优化温度计规则配置方式，使用循环结构简化示例代码
+- 修复模块导入路径，确保`exceptions.py`（原`exception.py`）能被正确引用
+- 修正方法调用链，确保重构后的方法命名在模块间保持一致
+
+---
+
 # Sudoku-Solver v0.6.1 版本更新日志
 
 ## 新增特性

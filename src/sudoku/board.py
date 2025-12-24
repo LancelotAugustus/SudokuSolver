@@ -16,9 +16,8 @@ class Board:
         Args:
             size: 棋盘尺寸（必须指定），必须是正整数
         """
-
         self.size = size
-        self.grid = [[0 for _ in range(size)] for _ in range(size)]
+        self.cells = [[0 for _ in range(size)] for _ in range(size)]
 
     def __str__(self):
         """可视化棋盘状态"""
@@ -26,25 +25,24 @@ class Board:
         for i in range(self.size):
             row_str = []
             for j in range(self.size):
-                digit = self.grid[i][j]
+                digit = self.cells[i][j]
                 row_str.append(str(digit) if digit != 0 else ".")
             result.append(" ".join(row_str))
-
         return "\n".join(result)
 
-    def configure(self, clue: list[int]) -> None:
+    def load_puzzle(self, puzzle_data: list[int]) -> None:
         """
-        配置棋盘的初始局面
+        加载棋盘的初始局面
 
         Args:
-            clue: 表示初始局面的整数列表，使用0表示空格
+            puzzle_data: 表示初始局面的整数列表，使用0表示空格
         """
         # 将整数列表转换为二维列表
         for i in range(self.size):
             for j in range(self.size):
-                self.grid[i][j] = clue[i * self.size + j]
+                self.cells[i][j] = puzzle_data[i * self.size + j]
 
-    def get(self, row: int, col: int) -> int:
+    def get_digit(self, row: int, col: int) -> int:
         """
         获取指定位置的数字
 
@@ -55,9 +53,9 @@ class Board:
         Returns:
             指定位置的数字
         """
-        return self.grid[row][col]
+        return self.cells[row][col]
 
-    def set(self, row: int, col: int, digit: int) -> None:
+    def set_digit(self, row: int, col: int, digit: int) -> None:
         """
         在指定位置放置数字
 
@@ -66,9 +64,9 @@ class Board:
             col: 列索引（0-based）
             digit: 要放置的数字
         """
-        self.grid[row][col] = digit
+        self.cells[row][col] = digit
 
-    def remove(self, row: int, col: int) -> None:
+    def remove_digit(self, row: int, col: int) -> None:
         """
         移除指定位置的数字（设置为0）
 
@@ -76,9 +74,9 @@ class Board:
             row: 行索引（0-based）
             col: 列索引（0-based）
         """
-        self.grid[row][col] = 0
+        self.cells[row][col] = 0
 
-    def find(self) -> Optional[tuple[int, int]]:
+    def find_empty_cell(self) -> Optional[tuple[int, int]]:
         """
         找到棋盘上的第一个空格
 
@@ -87,7 +85,7 @@ class Board:
         """
         for i in range(self.size):
             for j in range(self.size):
-                if self.grid[i][j] == 0:
+                if self.cells[i][j] == 0:
                     return i, j
         return None
 
@@ -100,5 +98,5 @@ class Board:
         """
         new_board = Board(self.size)
         for i in range(self.size):
-            new_board.grid[i] = self.grid[i].copy()
+            new_board.cells[i] = self.cells[i].copy()
         return new_board

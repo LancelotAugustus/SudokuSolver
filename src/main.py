@@ -12,39 +12,40 @@ def main():
     board = Board(9)
 
     # 设置初始局面
-    clue = (""
-            ""
-            ""
-            ""
-            ""
-            ""
-            ""
-            ""
-            "")
+    puzzle_str = (""
+                  ""
+                  ""
+                  ""
+                  ""
+                  ""
+                  ""
+                  ""
+                  "")
 
-    clue = ("852914637"
-            "000000000"
-            "000000000"
-            "000000000"
-            "000000000"
-            "000000000"
-            "000000000"
-            "000000000"
-            "000000000")
+    puzzle_str = ("852914637"
+                  "000000000"
+                  "000000000"
+                  "000000000"
+                  "000000000"
+                  "000000000"
+                  "000000000"
+                  "000000000"
+                  "000000000")
 
-    clue = parse_compact_clue(clue)
+    puzzle_data = parse_compact_puzzle(puzzle_str)
 
     print("\n初始局面:")
-    board.configure(clue)
+    board.load_puzzle(puzzle_data)
     print(board)
 
     # 创建规则
-    rule1 = NormalRowRule()
-    rule2 = NormalColumnRule()
-    rule3 = Normal9x9BlockRule()
-    rule4 = NonConsecutiveRule()
-    rule5 = ThermometerRule()
+    row_rule = RowRule()
+    col_rule = ColumnRule()
+    block_rule = Normal9x9BlockRule()
+    non_consecutive_rule = NonConsecutiveRule()
+    thermometer_rule = ThermometerRule()
 
+    # 定义温度计字符串列表
     thermometer_strings = [
         "C1B1A1",
         "C2B2A2",
@@ -62,15 +63,16 @@ def main():
         "H4H5H6H7"
     ]
 
+    # 使用for循环设置所有温度计
     for therm_str in thermometer_strings:
-        rule5.set(parse_compact_thermometer(therm_str))
+        thermometer_rule.set(parse_compact_thermometer(therm_str))
 
     # 创建求解器
-    solver = Solver(board, rule1, rule2, rule3, rule4, rule5)
+    solver = Solver(board, row_rule, col_rule, block_rule, non_consecutive_rule, thermometer_rule)
     print("\n开始求解...")
 
     # 求解数独
-    solution = solver.solution()
+    solution = solver.get_solution()
 
     if solution:
         print(f"\n求解成功！使用步数：{solver.steps}")

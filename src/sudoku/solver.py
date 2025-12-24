@@ -29,19 +29,19 @@ class Solver:
         self.pbar = None
 
         # 验证棋盘与规则的兼容性
-        self.test()
+        self.validate_compatibility()
 
-    def test(self) -> None:
+    def validate_compatibility(self) -> None:
         """
-        一次性调用所有rule实例的test方法
+        一次性调用所有rule实例的validate_compatibility方法
 
         Raises:
             SudokuError: 如果棋盘与任何规则不兼容
         """
         for rule in self.rules:
-            rule.test(self.board)
+            rule.validate_compatibility(self.board)
 
-    def check(self) -> bool:
+    def is_valid(self) -> bool:
         """
         检查当前棋盘是否满足所有规则
 
@@ -49,11 +49,11 @@ class Solver:
             如果满足所有规则返回True，否则返回False
         """
         for rule in self.rules:
-            if not rule.check(self.board):
+            if not rule.is_valid(self.board):
                 return False
         return True
 
-    def trial(self, row: int, col: int, digit: int) -> bool:
+    def try_set_digit(self, row: int, col: int, digit: int) -> bool:
         """
         尝试在指定位置放置数字
 
@@ -72,17 +72,17 @@ class Solver:
         self.pbar.update(1)
 
         # 记录原始数字
-        original_digit = self.board.get(row, col)
+        original_digit = self.board.get_digit(row, col)
 
         # 放置数字
-        self.board.set(row, col, digit)
+        self.board.set_digit(row, col, digit)
 
         # 检查是否满足所有规则
-        is_valid = self.check()
+        is_valid = self.is_valid()
 
         # 如果不满足规则，则恢复原始状态
         if not is_valid:
-            self.board.set(row, col, original_digit)
+            self.board.set_digit(row, col, original_digit)
 
         return is_valid
 
@@ -94,28 +94,28 @@ class Solver:
             如果找到解返回True，否则返回False
         """
         # 找到第一个空格
-        empty_pos = self.board.find()
+        empty_pos = self.board.find_empty_cell()
 
         # 如果没有空格，检查棋盘是否完全满足规则
         if not empty_pos:
-            return self.check()
+            return self.is_valid()
 
         row, col = empty_pos
 
         # 尝试所有可能的数字
         for digit in range(1, self.board.size + 1):
-            if self.trial(row, col, digit):
+            if self.try_set_digit(row, col, digit):
                 # 递归求解
                 if self.solve():
                     return True
 
                 # 如果当前数字导致无解，则回溯
-                self.board.remove(row, col)
+                self.board.remove_digit(row, col)
 
         # 所有数字都尝试过，无解
         return False
 
-    def solution(self) -> Optional[Board]:
+    def get_solution(self) -> Optional[Board]:
         """
         获取求解结果
 
