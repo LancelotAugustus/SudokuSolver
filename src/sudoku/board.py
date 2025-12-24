@@ -3,7 +3,6 @@
 数独棋盘模块，定义Board类用于管理棋盘状态。
 """
 
-
 from typing import Optional
 
 
@@ -38,7 +37,6 @@ class Board:
         Args:
             puzzle_data: 表示初始局面的整数列表，使用0表示空格
         """
-        # 将整数列表转换为二维列表
         for i in range(self.size):
             for j in range(self.size):
                 self.cells[i][j] = puzzle_data[i * self.size + j]

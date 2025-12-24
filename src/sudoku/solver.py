@@ -3,7 +3,6 @@
 数独求解器模块，实现回溯算法求解数独。
 """
 
-
 from typing import Optional
 from tqdm import tqdm
 from .board import Board
@@ -29,7 +28,6 @@ class Solver:
         self.steps = 0
         self.pbar = None
 
-        # 验证棋盘与规则的兼容性
         self.validate_compatibility()
 
     def validate_compatibility(self) -> None:
@@ -68,8 +66,6 @@ class Solver:
         """
         # 增加步数计数
         self.steps += 1
-
-        # 更新进度条
         self.pbar.update(1)
 
         # 记录原始数字

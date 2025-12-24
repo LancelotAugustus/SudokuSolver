@@ -27,7 +27,6 @@ def parse_spaced_puzzle(puzzle_str: str) -> list[int]:
     Returns:
         整数列表，每个元素对应一个数字
     """
-    # 按空格分割，过滤空字符串，然后转换为整数
     return [int(token) for token in puzzle_str.split() if token]
 
 
@@ -41,15 +40,11 @@ def parse_compact_thermometer(thermometer_str: str) -> list[tuple[int, int]]:
     Returns:
         坐标列表，格式为[(row1, col1), (row2, col2), ...]
     """
-    # 假设字母和数字交替出现，且字母都是单个字符，数字也是单个字符
     coordinates = []
 
     for i in range(0, len(thermometer_str), 2):
-        # 第i个字符是行字母，第i+1个字符是列数字
         row_char = thermometer_str[i]
         col_char = thermometer_str[i + 1]
-
-        # 转换为坐标
         row = ord(row_char) - ord('A')
         col = int(col_char) - 1
         coordinates.append((row, col))
@@ -71,13 +66,8 @@ def parse_spaced_thermometer(thermometer_str: str) -> list[tuple[int, int]]:
     tokens = thermometer_str.split()
 
     for token in tokens:
-        # 字母部分（第一个字符）
         row_char = token[0]
-
-        # 数字部分（第二个字符开始）
         col_str = token[1:]
-
-        # 转换为坐标
         row = ord(row_char) - ord('A')
         col = int(col_str) - 1
         coordinates.append((row, col))
