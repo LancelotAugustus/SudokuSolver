@@ -6,4 +6,4 @@
 from .format import *
 
 __all__ = ['parse_compact_clue',
-           'parse_spaced_clue',]
+           'parse_spaced_clue', ]

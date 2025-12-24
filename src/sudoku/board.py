@@ -5,6 +5,7 @@
 
 from typing import Optional
 
+
 class Board:
     """数独棋盘类"""
 

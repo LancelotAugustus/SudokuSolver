@@ -3,6 +3,7 @@
 数独棋盘格式化工具模块
 """
 
+
 def parse_compact_clue(clue_str: str) -> list[int]:
     """
     将无空格分隔的紧凑字符串转换为整数列表
