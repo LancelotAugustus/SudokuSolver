@@ -5,5 +5,9 @@
 
 from .format import *
 
-__all__ = ['parse_compact_clue',
-           'parse_spaced_clue', ]
+__all__ = [
+    'parse_compact_clue',
+    'parse_spaced_clue',
+    'parse_compact_thermometer',
+    'parse_spaced_thermometer',
+]
