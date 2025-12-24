@@ -45,20 +45,25 @@ def main():
     rule4 = NonConsecutiveRule()
     rule5 = ThermometerRule()
 
-    rule5.set(parse_compact_thermometer("C1B1A1"))
-    rule5.set(parse_compact_thermometer("C2B2A2"))
-    rule5.set(parse_compact_thermometer("B8A8A9B9"))
-    rule5.set(parse_compact_thermometer("C9D9E9F9"))
-    rule5.set(parse_compact_thermometer("D4E4F4"))
-    rule5.set(parse_compact_thermometer("D5E5F5"))
-    rule5.set(parse_compact_thermometer("E7D7D8E8"))
-    rule5.set(parse_compact_thermometer("I8H8G8"))
-    rule5.set(parse_compact_thermometer("I9H9G9"))
-    rule5.set(parse_compact_thermometer("I3I2I1"))
-    rule5.set(parse_compact_thermometer("H4H3H2"))
-    rule5.set(parse_compact_thermometer("G3G2G1"))
-    rule5.set(parse_compact_thermometer("G3G4G5G6"))
-    rule5.set(parse_compact_thermometer("H4H5H6H7"))
+    thermometer_strings = [
+        "C1B1A1",
+        "C2B2A2",
+        "B8A8A9B9",
+        "C9D9E9F9",
+        "D4E4F4",
+        "D5E5F5",
+        "E7D7D8E8",
+        "I8H8G8",
+        "I9H9G9",
+        "I3I2I1",
+        "H4H3H2",
+        "G3G2G1",
+        "G3G4G5G6",
+        "H4H5H6H7"
+    ]
+
+    for therm_str in thermometer_strings:
+        rule5.set(parse_compact_thermometer(therm_str))
 
     # 创建求解器
     solver = Solver(board, rule1, rule2, rule3, rule4, rule5)
