@@ -5,7 +5,6 @@
 
 from typing import Optional
 
-
 class Board:
     """数独棋盘类"""
 
@@ -15,13 +14,7 @@ class Board:
 
         Args:
             size: 棋盘尺寸（必须指定），必须是正整数
-
-        Raises:
-            ValueError: 如果size不是正整数
         """
-
-        if size <= 0:
-            raise ValueError(f"棋盘尺寸必须为正整数，当前尺寸为{size}")
 
         self.size = size
         self.grid = [[0 for _ in range(size)] for _ in range(size)]
@@ -38,47 +31,17 @@ class Board:
 
         return "\n".join(result)
 
-    def configure(self, clue: str) -> None:
+    def configure(self, clue: list[int]) -> None:
         """
         配置棋盘的初始局面
 
         Args:
-            clue: 表示初始局面的字符串，使用0表示空格，数字用空格分隔
-
-        Raises:
-            ValueError: 如果clue长度不等于棋盘格子总数，或包含无效字符
+            clue: 表示初始局面的整数列表，使用0表示空格
         """
-        # 按空格分割字符串
-        tokens = clue.split()
-
-        # 验证token数量是否等于棋盘格子总数
-        expected_length = self.size * self.size
-
-        if len(tokens) != expected_length:
-            raise ValueError(
-                f"clue必须包含{expected_length}个数字 (当前: {len(tokens)})"
-            )
-
-        # 将字符串转换为二维列表
+        # 将整数列表转换为二维列表
         for i in range(self.size):
             for j in range(self.size):
-                token = tokens[i * self.size + j]
-
-                # 验证token是否为有效的数字字符串
-                if not token.isdigit():
-                    raise ValueError(
-                        f"clue包含非法字符: '{token}' (位置 {i * self.size + j})"
-                    )
-
-                digit = int(token)
-
-                # 验证数字是否在有效范围内
-                if digit < 0 or digit > self.size:
-                    raise ValueError(
-                        f"数字{digit}超出有效范围(0-{self.size}) (位置 {i},{j})"
-                    )
-
-                self.grid[i][j] = digit
+                self.grid[i][j] = clue[i * self.size + j]
 
     def get(self, row: int, col: int) -> int:
         """

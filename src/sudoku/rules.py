@@ -183,3 +183,66 @@ class NonConsecutiveRule(Rule):
                         return False
 
         return True
+
+
+class ThermometerRule(Rule):
+    """温度计规则：沿着每个温度计的数字必须从灯泡端开始递增"""
+
+    def __init__(self):
+        """初始化温度计规则"""
+        super().__init__()
+        self.thermometers = []
+
+    def set(self, thermometer:list[tuple[int, int]]) -> None:
+        """
+        添加一个温度计
+
+        Args:
+            thermometer: 一个温度计的坐标列表，例如[(0,0), (0,1), (1,1)]
+        """
+        self.thermometers.append(thermometer)
+
+    def test(self, board: Board) -> None:
+        """
+        检查温度计坐标是否在棋盘范围内
+
+        Args:
+            board: 要检查的棋盘
+
+        Raises:
+            SudokuError: 如果温度计坐标超出棋盘范围
+        """
+        size = board.size
+
+        for i, thermometer in enumerate(self.thermometers):
+            for row, col in thermometer:
+                if row < 0 or row >= size or col < 0 or col >= size:
+                    raise SudokuError(
+                        self.rule_name,
+                        f"温度计{i}坐标({row},{col})超出棋盘范围(0-{size - 1})"
+                    )
+
+    def check(self, board: Board) -> bool:
+        """
+        检查棋盘是否满足温度计规则
+
+        Args:
+            board: 要检查的棋盘
+
+        Returns:
+            如果满足规则返回True，否则返回False
+        """
+        for thermometer in self.thermometers:
+            # 提取温度计上的数字（过滤掉0）
+            digits = []
+            for row, col in thermometer:
+                digit = board.get(row, col)
+                if digit != 0:
+                    digits.append(digit)
+
+            # 检查数字是否严格递增
+            for i in range(1, len(digits)):
+                if digits[i] <= digits[i - 1]:
+                    return False
+
+        return True

@@ -3,6 +3,7 @@
 实用工具包
 """
 
-from .format import separate
+from .format import *
 
-__all__ = ['separate']
+__all__ = ['parse_compact_clue',
+           'parse_spaced_clue',]
