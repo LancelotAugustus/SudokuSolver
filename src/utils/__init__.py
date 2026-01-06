@@ -7,6 +7,6 @@ from .parser import *
 __all__ = [
     'parse_compact_puzzle',
     'parse_spaced_puzzle',
-    'parse_compact_thermometer',
-    'parse_spaced_thermometer',
+    'parse_compact_coordinates',
+    'parse_spaced_coordinates',
 ]

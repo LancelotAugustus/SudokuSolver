@@ -35,21 +35,21 @@ def parse_spaced_puzzle(puzzle_str: str) -> list[int]:
     return [int(token) for token in puzzle_str.split() if token]
 
 
-def parse_compact_thermometer(thermometer_str: str) -> list[tuple[int, int]]:
+def parse_compact_coordinates(coordinates_str: str) -> list[tuple[int, int]]:
     """
-    将无空格分隔的温度计字符串转换为坐标列表
+    将无空格分隔的坐标字符串转换为坐标列表
 
     Args:
-        thermometer_str: 无空格分隔的温度计字符串，形如"A1B1B2"
+        coordinates_str: 无空格分隔的坐标字符串，形如"A1B1B2"
 
     Returns:
         坐标列表，格式为[(row1, col1), (row2, col2), ...]
     """
     coordinates = []
 
-    for i in range(0, len(thermometer_str), 2):
-        row_char = thermometer_str[i]
-        col_char = thermometer_str[i + 1]
+    for i in range(0, len(coordinates_str), 2):
+        row_char = coordinates_str[i]
+        col_char = coordinates_str[i + 1]
         row = ord(row_char) - ord('A')
         col = int(col_char) - 1
         coordinates.append((row, col))
@@ -57,18 +57,18 @@ def parse_compact_thermometer(thermometer_str: str) -> list[tuple[int, int]]:
     return coordinates
 
 
-def parse_spaced_thermometer(thermometer_str: str) -> list[tuple[int, int]]:
+def parse_spaced_coordinates(coordinates_str: str) -> list[tuple[int, int]]:
     """
-    将有空格分隔的温度计字符串转换为坐标列表
+    将有空格分隔的坐标字符串转换为坐标列表
 
     Args:
-        thermometer_str: 有空格分隔的温度计字符串，形如"B7 B8 B9 B10"
+        coordinates_str: 有空格分隔的坐标字符串，形如"B7 B8 B9 B10"
 
     Returns:
         坐标列表，格式为[(row1, col1), (row2, col2), ...]
     """
     coordinates = []
-    tokens = thermometer_str.split()
+    tokens = coordinates_str.split()
 
     for token in tokens:
         row_char = token[0]

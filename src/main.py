@@ -40,39 +40,45 @@ def main():
     non_consecutive_rule = NonConsecutiveRule()
     thermometer_rule = ThermometerRule()
     killer_rule = KillerRule()
-    killer_rule.set(30, [(0, 0), (0, 1), (1, 0), (1, 1), (1, 2), (2, 0)])
-    killer_rule.set(6, [(0, 2), (0, 3)])
-    killer_rule.set(3, [(0, 4)])
-    killer_rule.set(6, [(0, 5), (0, 6)])
-    killer_rule.set(16, [(0, 7), (0, 8)])
-    killer_rule.set(20, [(1, 3), (1, 4), (2, 4)])
-    killer_rule.set(18, [(1, 5), (1, 6), (2, 5), (2, 6)])
-    killer_rule.set(9, [(1, 7), (2, 7)])
-    killer_rule.set(10, [(1, 8), (2, 8)])
-    killer_rule.set(10, [(2, 1), (2, 2)])
-    killer_rule.set(15, [(2, 3), (3, 3)])
-    killer_rule.set(30, [(3, 0), (3, 1), (3, 2), (4, 0), (4, 1)])
-    killer_rule.set(23, [(3, 4), (4, 3), (4, 4), (4, 5)])
-    killer_rule.set(4, [(3, 5), (3, 6)])
-    killer_rule.set(9, [(3, 7), (3, 8)])
-    killer_rule.set(4, [(4, 2), (5, 2)])
-    killer_rule.set(15, [(4, 6), (4, 7), (4, 8)])
-    killer_rule.set(4, [(5, 0)])
-    killer_rule.set(21, [(5, 1), (6, 1), (6, 2)])
-    killer_rule.set(7, [(5, 3), (5, 4)])
-    killer_rule.set(21, [(5, 5), (5, 6), (6, 5)])
-    killer_rule.set(13, [(5, 7), (5, 8), (6, 8)])
-    killer_rule.set(8, [(6, 0), (7, 0)])
-    killer_rule.set(13, [(6, 3), (7, 3)])
-    killer_rule.set(3, [(6, 4), (7, 4)])
-    killer_rule.set(10, [(6, 6), (6, 7)])
-    killer_rule.set(6, [(7, 1), (7, 2)])
-    killer_rule.set(11, [(7, 5), (7, 6)])
-    killer_rule.set(13, [(7, 7), (8, 7)])
-    killer_rule.set(11, [(7, 8), (8, 8)])
-    killer_rule.set(10, [(8, 0), (8, 1)])
-    killer_rule.set(21, [(8, 2), (8, 3), (8, 4)])
-    killer_rule.set(5, [(8, 5), (8, 6)])
+    killer_strings = [
+        "30:A1A2B1B2B3C1",
+        "6:A3A4",
+        "3:A5",
+        "6:A6A7",
+        "16:A8A9",
+        "20:B4B5C5",
+        "18:B6B7C6C7",
+        "9:B8C8",
+        "10:B9C9",
+        "10:C2C3",
+        "15:C4D4",
+        "30:D1D2D3E1E2",
+        "23:D5E4E5E6",
+        "4:D6D7",
+        "9:D8D9",
+        "4:E3F3",
+        "15:E7E8E9",
+        "4:F1",
+        "21:F2G2G3",
+        "7:F4F5",
+        "21:F6F7G6",
+        "13:F8F9G9",
+        "8:G1H1",
+        "13:G4H4",
+        "3:G5H5",
+        "10:G7G8",
+        "6:H2H3",
+        "11:H6H7",
+        "13:H8I8",
+        "11:H9I9",
+        "10:I1I2",
+        "21:I3I4I5",
+        "5:I6I7"
+    ]
+
+    for killer_str in killer_strings:
+        sum_value, coords_str = killer_str.split(':')
+        killer_rule.set(int(sum_value), parse_compact_coordinates(coords_str))
 
     thermometer_strings = [
         "C1B1A1",
@@ -92,7 +98,7 @@ def main():
     ]
 
     for therm_str in thermometer_strings:
-        thermometer_rule.set(parse_compact_thermometer(therm_str))
+        thermometer_rule.set(parse_compact_coordinates(therm_str))
 
     # solver = Solver(board, row_rule, col_rule, block_rule, non_consecutive_rule, thermometer_rule)
     solver = Solver(board, row_rule, col_rule, block_rule, killer_rule)
