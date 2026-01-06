@@ -17,7 +17,7 @@ class Board:
             size: 棋盘尺寸（必须指定），必须是正整数
         """
         self.size = size
-        self.cells = [[0 for _ in range(size)] for _ in range(size)]
+        self._cells = [[0 for _ in range(size)] for _ in range(size)]
 
     def __str__(self):
         """可视化棋盘状态"""
@@ -25,7 +25,7 @@ class Board:
         for i in range(self.size):
             row_str = []
             for j in range(self.size):
-                digit = self.cells[i][j]
+                digit = self._cells[i][j]
                 row_str.append(str(digit) if digit != 0 else ".")
             result.append(" ".join(row_str))
         return "\n".join(result)
@@ -39,7 +39,7 @@ class Board:
         """
         for i in range(self.size):
             for j in range(self.size):
-                self.cells[i][j] = puzzle_data[i * self.size + j]
+                self._cells[i][j] = puzzle_data[i * self.size + j]
 
     def get_digit(self, row: int, col: int) -> int:
         """
@@ -52,7 +52,7 @@ class Board:
         Returns:
             指定位置的数字
         """
-        return self.cells[row][col]
+        return self._cells[row][col]
 
     def set_digit(self, row: int, col: int, digit: int) -> None:
         """
@@ -63,7 +63,7 @@ class Board:
             col: 列索引（0-based）
             digit: 要放置的数字
         """
-        self.cells[row][col] = digit
+        self._cells[row][col] = digit
 
     def remove_digit(self, row: int, col: int) -> None:
         """
@@ -73,7 +73,7 @@ class Board:
             row: 行索引（0-based）
             col: 列索引（0-based）
         """
-        self.cells[row][col] = 0
+        self._cells[row][col] = 0
 
     def find_empty_cell(self) -> Optional[tuple[int, int]]:
         """
@@ -84,7 +84,7 @@ class Board:
         """
         for i in range(self.size):
             for j in range(self.size):
-                if self.cells[i][j] == 0:
+                if self._cells[i][j] == 0:
                     return i, j
         return None
 
@@ -97,5 +97,5 @@ class Board:
         """
         new_board = Board(self.size)
         for i in range(self.size):
-            new_board.cells[i] = self.cells[i].copy()
+            new_board._cells[i] = self._cells[i].copy()
         return new_board

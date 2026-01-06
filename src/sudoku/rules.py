@@ -13,11 +13,11 @@ class Rule(ABC):
 
     def __init__(self):
         """初始化规则，规则名称自动设置为类名"""
-        self.rule_name = self.__class__.__name__
+        self._rule_name = self.__class__.__name__
 
     def __str__(self):
         """返回规则名称"""
-        return self.rule_name
+        return self._rule_name
 
     @abstractmethod
     def is_valid(self, board: Board) -> bool:
@@ -105,7 +105,7 @@ class Normal9x9BlockRule(Rule):
         """
         if board.size != 9:
             raise SudokuError(
-                self.rule_name,
+                self._rule_name,
                 f"规则仅适用于9×9数独，当前棋盘尺寸为{board.size}×{board.size}"
             )
 
@@ -191,7 +191,7 @@ class ThermometerRule(Rule):
     def __init__(self):
         """初始化温度计规则"""
         super().__init__()
-        self.thermometers = []
+        self._thermometers = []
 
     def set(self, thermometer: list[tuple[int, int]]) -> None:
         """
@@ -200,7 +200,7 @@ class ThermometerRule(Rule):
         Args:
             thermometer: 一个温度计的坐标列表，例如[(0,0), (0,1), (1,1)]
         """
-        self.thermometers.append(thermometer)
+        self._thermometers.append(thermometer)
 
     def validate_compatibility(self, board: Board) -> None:
         """
@@ -214,11 +214,11 @@ class ThermometerRule(Rule):
         """
         size = board.size
 
-        for i, thermometer in enumerate(self.thermometers):
+        for i, thermometer in enumerate(self._thermometers):
             for row, col in thermometer:
                 if row < 0 or row >= size or col < 0 or col >= size:
                     raise SudokuError(
-                        self.rule_name,
+                        self._rule_name,
                         f"温度计{i}坐标({row},{col})超出棋盘范围(0-{size - 1})"
                     )
 
@@ -232,7 +232,7 @@ class ThermometerRule(Rule):
         Returns:
             如果满足规则返回True，否则返回False
         """
-        for thermometer in self.thermometers:
+        for thermometer in self._thermometers:
             # 提取温度计上的数字（过滤掉0）
             digits = []
             for row, col in thermometer:
@@ -254,8 +254,8 @@ class KillerRule(Rule):
     def __init__(self):
         """初始化杀手数独规则"""
         super().__init__()
-        self.cages = []
-        self.cage_sums = []
+        self._cages = []
+        self._cage_sums = []
 
     def set(self, cage_sum: int, cage: list[tuple[int, int]]) -> None:
         """
@@ -265,8 +265,8 @@ class KillerRule(Rule):
             cage_sum: 笼子内数字的和值
             cage: 笼子覆盖的单元格坐标列表
         """
-        self.cage_sums.append(cage_sum)
-        self.cages.append(cage)
+        self._cage_sums.append(cage_sum)
+        self._cages.append(cage)
 
     def validate_compatibility(self, board: Board) -> None:
         """
@@ -280,11 +280,11 @@ class KillerRule(Rule):
         """
         size = board.size
 
-        for i, cage in enumerate(self.cages):
+        for i, cage in enumerate(self._cages):
             for row, col in cage:
                 if row < 0 or row >= size or col < 0 or col >= size:
                     raise SudokuError(
-                        self.rule_name,
+                        self._rule_name,
                         f"笼子{i}坐标({row},{col})超出棋盘范围(0-{size - 1})"
                     )
 
@@ -298,7 +298,7 @@ class KillerRule(Rule):
         Returns:
             如果满足规则返回True，否则返回False
         """
-        for cage, cage_sum in zip(self.cages, self.cage_sums):
+        for cage, cage_sum in zip(self._cages, self._cage_sums):
             digits = []
             s = 0
 

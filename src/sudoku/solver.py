@@ -23,10 +23,10 @@ class Solver:
         Raises:
             SudokuError: 如果棋盘与任何规则不兼容
         """
-        self.board = board.copy()
-        self.rules = rules
-        self.steps = 0
-        self.pbar = None
+        self._board = board.copy()
+        self._rules = rules
+        self._steps = 0
+        self._pbar = None
 
         self.validate_compatibility()
 
@@ -37,8 +37,8 @@ class Solver:
         Raises:
             SudokuError: 如果棋盘与任何规则不兼容
         """
-        for rule in self.rules:
-            rule.validate_compatibility(self.board)
+        for rule in self._rules:
+            rule.validate_compatibility(self._board)
 
     def is_valid(self) -> bool:
         """
@@ -47,8 +47,8 @@ class Solver:
         Returns:
             如果满足所有规则返回True，否则返回False
         """
-        for rule in self.rules:
-            if not rule.is_valid(self.board):
+        for rule in self._rules:
+            if not rule.is_valid(self._board):
                 return False
         return True
 
@@ -65,21 +65,21 @@ class Solver:
             如果放置后棋盘有效则返回True，否则返回False
         """
         # 增加步数计数
-        self.steps += 1
-        self.pbar.update(1)
+        self._steps += 1
+        self._pbar.update(1)
 
         # 记录原始数字
-        original_digit = self.board.get_digit(row, col)
+        original_digit = self._board.get_digit(row, col)
 
         # 放置数字
-        self.board.set_digit(row, col, digit)
+        self._board.set_digit(row, col, digit)
 
         # 检查是否满足所有规则
         is_valid = self.is_valid()
 
         # 如果不满足规则，则恢复原始状态
         if not is_valid:
-            self.board.set_digit(row, col, original_digit)
+            self._board.set_digit(row, col, original_digit)
 
         return is_valid
 
@@ -91,7 +91,7 @@ class Solver:
             如果找到解返回True，否则返回False
         """
         # 找到第一个空格
-        empty_pos = self.board.find_empty_cell()
+        empty_pos = self._board.find_empty_cell()
 
         # 如果没有空格，检查棋盘是否完全满足规则
         if not empty_pos:
@@ -100,14 +100,14 @@ class Solver:
         row, col = empty_pos
 
         # 尝试所有可能的数字
-        for digit in range(1, self.board.size + 1):
+        for digit in range(1, self._board.size + 1):
             if self.try_set_digit(row, col, digit):
                 # 递归求解
                 if self.solve():
                     return True
 
                 # 如果当前数字导致无解，则回溯
-                self.board.remove_digit(row, col)
+                self._board.remove_digit(row, col)
 
         # 所有数字都尝试过，无解
         return False
@@ -119,13 +119,23 @@ class Solver:
         Returns:
             返回求解后的棋盘，如果无解则返回None
         """
-        self.pbar = tqdm(
+        self._pbar = tqdm(
             desc="求解进度",
             unit="步",
             bar_format="{desc}: {n}步 - 速率: {rate_fmt} - 已用: {elapsed}",
         )
 
         if self.solve():
-            return self.board.copy()
+            return self._board.copy()
 
         return None
+    
+    @property
+    def steps(self) -> int:
+        """
+        获取求解步数
+        
+        Returns:
+            求解过程中尝试的步数
+        """
+        return self._steps

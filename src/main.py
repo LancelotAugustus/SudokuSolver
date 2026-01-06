@@ -1,4 +1,4 @@
-# src/main.py
+ # src/main.py
 """
 数独求解器使用示例
 """
