@@ -1,4 +1,3 @@
-# src/sudoku/solver.py
 """
 数独求解器模块，实现回溯算法求解数独。
 """
@@ -66,7 +65,8 @@ class Solver:
         """
         # 增加步数计数
         self._steps += 1
-        self._pbar.update(1)
+        if self._pbar is not None:
+            self._pbar.update(1)
 
         # 记录原始数字
         original_digit = self._board.get_digit(row, col)

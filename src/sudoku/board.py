@@ -1,4 +1,3 @@
-# src/sudoku/board.py
 """
 数独棋盘模块，定义Board类用于管理棋盘状态。
 """
@@ -14,13 +13,18 @@ class Board:
         初始化数独棋盘
 
         Args:
-            size: 棋盘尺寸（必须指定），必须是正整数
+            size: 棋盘尺寸，必须是正整数
         """
         self.size = size
         self._cells = [[0 for _ in range(size)] for _ in range(size)]
 
     def __str__(self):
-        """可视化棋盘状态"""
+        """
+        可视化棋盘状态
+
+        Returns:
+            棋盘的字符串表示，每个数字之间用空格分隔，行之间用换行分隔，空格用"."表示
+        """
         result = []
         for i in range(self.size):
             row_str = []

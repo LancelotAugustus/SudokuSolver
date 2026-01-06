@@ -1,4 +1,3 @@
-# src/sudoku/rules.py
 """
 数独规则模块，定义抽象规则类和具体规则实现。
 """
@@ -34,7 +33,7 @@ class Rule(ABC):
 
     def validate_compatibility(self, board: Board) -> None:
         """
-        检查棋盘与规则是否适配（默认实现不进行任何检查）
+        检查棋盘与规则是否适配
 
         Args:
             board: 要检查的棋盘
@@ -249,7 +248,7 @@ class ThermometerRule(Rule):
 
 
 class KillerRule(Rule):
-    """杀手数独规则：笼子内的数字之和必须等于角标数字，且笼子内数字不能重复"""
+    """杀手数独规则：笼子内的数字之和必须等于目标和值，且笼子内数字不能重复"""
 
     def __init__(self):
         """初始化杀手数独规则"""

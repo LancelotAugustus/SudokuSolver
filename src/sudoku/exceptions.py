@@ -1,11 +1,10 @@
-# src/sudoku/exceptions.py
 """
 自定义异常模块，用于处理数独求解过程中的异常情况。
 """
 
 
 class SudokuError(Exception):
-    """数独异常基类，用于处理棋盘与规则不兼容的情况"""
+    """数独异常基类，用于处理数独求解过程中的各种异常情况，包括但不限于棋盘与规则不兼容"""
 
     def __init__(self, rule_name: str, message: str = "棋盘与规则存在兼容性问题"):
         """
